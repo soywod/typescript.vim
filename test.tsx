@@ -14,7 +14,7 @@ class Toto extends Lol {
 
   }
 
-  protected render(): string {
+  protected render(tot: number, lol: Array): string {
     return (
       <Toto test="lol" o={true}>
         <Test
