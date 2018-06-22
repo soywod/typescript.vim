@@ -10,10 +10,11 @@ const toto = {
 }
 
 class Toto extends Lol {
-  toto = 34
-  private toto: string = 34
+  protected render(): string {
 
-  render() {
+  }
+
+  protected render(): string {
     return (
       <Toto test="lol" o={true}>
         <Test
