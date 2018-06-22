@@ -24,7 +24,7 @@ syntax sync fromstart
 " syntax case ignore
 syntax case match
 
-syntax match   jsNoise          /[:,;]/
+syntax match   jsNoise          /[:,;<>]/
 syntax match   jsNoise          /\./ skipwhite skipempty nextgroup=jsObjectProp,jsFuncCall,jsPrototype,jsTaggedTemplate
 syntax match   jsObjectProp     contained /\<\K\k*/
 syntax match   jsFuncCall       /\<\K\k*\ze\s*(/
@@ -183,7 +183,7 @@ syntax match   jsClassNoise             contained /\./
 syntax match   jsClassFuncName          contained /\<\K\k*\ze\s*[(<]/ skipwhite skipempty nextgroup=jsFuncArgs,jsFlowClassFunctionGroup
 syntax match   jsClassMethodType        contained /\<\%([gs]et\|static\)\ze\s\+\K\k*/ skipwhite skipempty nextgroup=jsAsyncKeyword,tsClassAccessKeyword,jsClassFuncName,jsClassProperty,tsClassMethod
 syntax region  jsClassDefinition                  start=/\<class\>/ end=/\(\<extends\>\s\+\)\@<!{\@=/ contains=jsClassKeyword,jsExtendsKeyword,jsClassNoise,@jsExpression,jsFlowClassGroup skipwhite skipempty nextgroup=jsCommentClass,jsClassBlock,jsFlowClassGroup
-syntax match   jsClassProperty          contained /\<\K\k*\ze\s*:\?\s*\k*\s*=/ skipwhite skipempty contains=tsType nextgroup=jsClassValue,jsFlowClassDef
+syntax match   jsClassProperty          contained /\<\K\k*\ze\s*:\?\s*\k*\s*=\?/ skipwhite skipempty contains=tsType nextgroup=jsClassValue,jsFlowClassDef
 syntax match   tsClassMethod            contained /\<\K\k*\s*(.*)\s*:\?\s*\k*/ skipwhite skipempty contains=tsType,jsFuncArgs nextgroup=jsFuncBlock
 syntax region  jsClassValue             contained start=/=/ end=/\_[;}]\@=/ contains=@jsExpression
 syntax region  jsClassPropertyComputed  contained matchgroup=jsBrackets start=/\[/ end=/]/ contains=@jsExpression skipwhite skipempty nextgroup=jsFuncArgs,jsClassValue extend
@@ -221,12 +221,24 @@ syntax match   jsDecorator                    /^\s*@/ nextgroup=jsDecoratorFunct
 syntax match   jsDecoratorFunction  contained /\h[a-zA-Z0-9_.]*/ nextgroup=jsParenDecorator
 
 " TypeScript
-syntax keyword tsType             contained boolean number string Array enum any void null undefined never object
+" syntax keyword tsType             contained boolean number string Array enum any void null undefined never object
+
+
+
+
+
+" ==============================================================================
+
+syntax match  tsInterfaceKey  contained /\k*\ze\s*:/ skipwhite skipempty nextgroup=tsType
+syntax match  tsType contained /:\s*\k*\(<.*>\)\?/ extend contains=jsNoise
+
 syntax keyword tsInterfaceKeyword contained interface
-syntax region  tsInterfaceDef     start=/\<interface\>/ end=/\(\<extends\>\s\+\)\@<!{\@=/ contains=tsInterfaceKeyword skipwhite skipempty nextgroup=tsInterface
-syntax region  tsInterface        contained start=/{/  end=/}/ contains=tsInterfaceKey,tsInterfaceType extend fold
-syntax match   tsInterfaceKey     contained /\<\k*\ze\s*:/     skipwhite skipempty nextgroup=tsInterfaceType
-syntax region  tsInterfaceType    contained start=/:/  end=/$/ contains=tsType
+syntax region  tsInterfaceDefinition start=/interface/ end=/\(extends\s\+\)\@<!{\@=/ contains=tsInterfaceKeyword skipwhite skipempty nextgroup=tsInterface
+" syntax match   tsInterfaceKey /\K\k*\s*:/ skipwhite skipempty nextgroup=tsInterfaceType contained
+" syntax region  tsType         start=/:/ end=/$/ skipwhite skipempty contained
+syntax region  tsInterface    start=/{/  end=/}/ contains=tsInterfaceKey,tsType extend fold contained
+
+" ==============================================================================
 
 if exists("javascript_plugin_jsdoc")
   runtime extras/jsdoc.vim
@@ -385,7 +397,7 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink tsType                 Type
   HiLink tsInterfaceKeyword     Keyword
   HiLink tsInterfaceKey         jsObjectKey
-  HiLink tsInterfaceDef         jsFuncName
+  HiLink tsInterfaceDefinition  Function
   HiLink tsClassAccessKeyword   Keyword
   HiLink tsClassMethod          jsObjectKey
   delcommand HiLink

@@ -1,6 +1,7 @@
 interface Lolol {
   test: boolean
   toto: string
+  lol: Array<Toto, Tata, Tutu>
   lol: Array<Toto>
 }
 
@@ -10,6 +11,9 @@ const toto = {
 }
 
 class Toto extends Lol {
+  private $canvas: HTMLDivElement | null
+  private background: string
+
   protected render(): string {
 
   }
