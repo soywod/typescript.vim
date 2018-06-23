@@ -17,8 +17,12 @@ class Toto extends Lol {
   private $canvas: HTMLDivElement | null & boolean
   private background: string = "oeuoeu"
 
-  protected render(): string {
+  private onWindowResize = () => {
+    const width = this.$canvas && (this.$canvas.offsetWidth) || 0
+    const height = window.innerHeight
+    const isFullWidth = (width / height > 1.5)
 
+    this.setState({isFullWidth})
   }
 
   protected render(tot: number | null, lol: Array<toto, lol>): string {
@@ -30,7 +34,6 @@ class Toto extends Lol {
             this.coucou()
           )}
         >
-          {this.toto()}
           <Toul
             teto={true}
           />

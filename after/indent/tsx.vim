@@ -99,6 +99,8 @@ fu! GetTsxIndent()
     " Then correct the indentation of any TSX following '/>' or '>'.
     if getline(v:lnum - 1) =~? s:endtag
       let ind = ind + &sw
+    elseif empty(getline(v:lnum - 1)) && getline(v:lnum - 2) =~? s:endtag
+      let ind = ind + &sw
     endif
   else
     if len(b:tsx_ts_indentexpr)

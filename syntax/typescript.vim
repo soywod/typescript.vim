@@ -379,14 +379,14 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink jsGlobalNodeObjects    Constant
   HiLink jsExceptions           Constant
   HiLink jsBuiltins             Constant
-  HiLink jsImport               Include
-  HiLink jsExport               Include
-  HiLink jsExportDefault        StorageClass
+  HiLink jsImport               Statement
+  HiLink jsExport               Statement
+  HiLink jsExportDefault        Keyword
   HiLink jsExportDefaultGroup   jsExportDefault
-  HiLink jsModuleAs             Include
+  HiLink jsModuleAs             Statement
   HiLink jsModuleComma          jsNoise
   HiLink jsModuleAsterisk       Noise
-  HiLink jsFrom                 Include
+  HiLink jsFrom                 Statement
   HiLink jsDecorator            Special
   HiLink jsDecoratorFunction    Function
   HiLink jsParensDecorator      jsParens
@@ -473,7 +473,7 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink jsFlowMaybe              Noise
   HiLink jsFlowReturnMaybe        PreProc
   HiLink jsFlowClassProperty      jsClassProperty
-  HiLink jsFlowDeclare            PreProc
+  HiLink jsFlowDeclare            Keyword
   HiLink jsFlowModule             PreProc
   HiLink jsFlowNoise              Noise
   HiLink jsFlowObjectKey          jsObjectKey
@@ -484,6 +484,7 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink jsFlowWildcardReturn     PreProc
   HiLink jsFlowImportType         PreProc
   HiLink jsFlowTypeValue          PreProc
+  HiLink jsModuleKeyword          jsFlowType
   delcommand HiLink
 endif
 
