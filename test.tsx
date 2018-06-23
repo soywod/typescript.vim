@@ -1,51 +1,50 @@
-import Toto from "lol"
+import React, {Component} from "react"
+import {HashRouter, Route, withRouter} from "react-router-dom"
 
-interface Lolol {
-  lol?: Array<Toto>
-  lol: string | null<Toto, lol>
+import Component1 from "./component/Component1"
+
+interface IState {
+  loaded: boolean
 }
 
-type Toto = {
-  lol: string
-  test: boolean | TNoto<oleuoeu>
-}
-
-const toto = {
-  test: "lol",
-  toto: (stir) => "oeuo",
-}
-
-class Toto extends Lol {
-  private $canvas: HTMLDivElement | null & boolean
-  private background: string = "oeuoeu"
-
-  private onWindowResize = () => {
-    const width = this.$canvas && (this.$canvas.offsetWidth) || 0
-    const height = window.innerHeight
-    const isFullWidth = (width / height > 1.5)
-
-    this.setState({isFullWidth})
+class AppComponent extends Component<{}, IState> {
+  constructor(props: {}) {
+    super(props)
+    this.state = {loaded: false}
   }
 
-  protected render(tot: number | null, lol: Array<toto, lol>): string {
+  public render(): void {
     return (
-      <Toto test="lol" o={true}>
-        <Test
-          test="lol"
-          toto={(toto) => (
-            this.coucou()
-          )}
-        >
-          <Toul
-            teto={true}
-          />
+      <HashRouter>
+        <ScrollToTop>
+          <Navbar />
 
-          <Toul
-            teto={true}
-          />
-        </Test>
-      </Toto>
+          <main className={styles.main}>
+            <Route exact path="/" component={Component1} />
+            <Route exact path="/route2" component={Component2} />
+          </main>
+        </ScrollToTop>
+      </HashRouter>
     )
   }
+
+  public componentDidMount() {
+    window.onload = () => {
+      const $loader = document.getElementById("loader")
+      if (! $loader) {
+        return
+      }
+
+      $loader.className = "loaded"
+
+      this.setState({loaded: true})
+      setTimeout(() => document.body.removeChild($loader), 1000)
+    }
+  }
+
+  public componentWillUnmount() {
+    window.onload = null
+  }
 }
 
+export default AppComponent
