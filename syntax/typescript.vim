@@ -329,8 +329,8 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink jsTry                  Exception
   HiLink jsFinally              Exception
   HiLink jsCatch                Exception
-  HiLink jsAsyncKeyword         Keyword
-  HiLink jsForAwait             Keyword
+  HiLink jsAsyncKeyword         Statement
+  HiLink jsForAwait             Statement
   HiLink jsArrowFunction        Type
   HiLink jsFunction             Type
   HiLink jsGenerator            jsFunction
@@ -345,8 +345,8 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink jsOperator             Operator
   HiLink jsOf                   Operator
   HiLink jsStorageClass         StorageClass
-  HiLink jsClassKeyword         Keyword
-  HiLink jsExtendsKeyword       Keyword
+  HiLink jsClassKeyword         Statement
+  HiLink jsExtendsKeyword       Statement
   HiLink jsThis                 Special
   HiLink jsSuper                Constant
   HiLink jsNan                  Number
@@ -381,7 +381,7 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink jsBuiltins             Constant
   HiLink jsImport               Statement
   HiLink jsExport               Statement
-  HiLink jsExportDefault        Keyword
+  HiLink jsExportDefault        Statement
   HiLink jsExportDefaultGroup   jsExportDefault
   HiLink jsModuleAs             Statement
   HiLink jsModuleComma          jsNoise
@@ -398,7 +398,7 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink jsSwitchColon          Noise
   HiLink jsClassMethodType      Type
   HiLink jsObjectMethodType     Type
-  HiLink jsClassDefinition      jsFuncName
+  HiLink jsClassDefinition      Keyword
   HiLink jsBlockLabel           Identifier
   HiLink jsBlockLabelKey        jsBlockLabel
 
@@ -424,17 +424,20 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink jsCssStyles            Label
 
 
-  HiLink tsInterfaceKeyword     Keyword
-  HiLink tsTypeKeyword          Keyword
-  HiLink tsType                 Noise
+  
 
+
+
+
+
+  HiLink tsInterfaceKeyword     Statement
+  HiLink tsTypeKeyword          Statement
+  HiLink tsType                 Noise
   HiLink tsInterfaceKey         jsObjectKey
   HiLink tsTypeKey              jsObjectKey
-
-  HiLink tsInterfaceDefinition  Function
-  HiLink tsTypeDefinition       Function
-
-  HiLink tsClassAccessKeyword   Keyword
+  HiLink tsInterfaceDefinition  Keyword
+  HiLink tsTypeDefinition       Keyword
+  HiLink tsClassAccessKeyword   Statement
   HiLink tsClassMethod          jsObjectKey
 
 
@@ -473,7 +476,7 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink jsFlowMaybe              Noise
   HiLink jsFlowReturnMaybe        PreProc
   HiLink jsFlowClassProperty      jsClassProperty
-  HiLink jsFlowDeclare            Keyword
+  HiLink jsFlowDeclare            Statement
   HiLink jsFlowModule             PreProc
   HiLink jsFlowNoise              Noise
   HiLink jsFlowObjectKey          jsObjectKey
@@ -484,7 +487,7 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink jsFlowWildcardReturn     PreProc
   HiLink jsFlowImportType         PreProc
   HiLink jsFlowTypeValue          PreProc
-  HiLink jsModuleKeyword          jsFlowType
+  HiLink jsModuleKeyword          Keyword
   delcommand HiLink
 endif
 

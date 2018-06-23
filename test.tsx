@@ -1,3 +1,5 @@
+import Toto from "lol"
+
 interface Lolol {
   lol?    : Array<Toto>
   lol: string | null<Toto, lol>
