@@ -24,14 +24,14 @@ syntax sync fromstart
 " syntax case ignore
 syntax case match
 
-syntax match   jsNoise          /[:,;<>]/
+syntax match   jsNoise          /[:,;]/
 syntax match   jsNoise          /\./ skipwhite skipempty nextgroup=jsObjectProp,jsFuncCall,jsPrototype,jsTaggedTemplate
 syntax match   jsObjectProp     contained /\<\K\k*/
 syntax match   jsFuncCall       /\<\K\k*\ze\s*(/
 syntax match   jsParensError    /[)}\]]/
 
 " Program Keywords
-syntax keyword jsStorageClass   const var let skipwhite skipempty nextgroup=jsDestructuringBlock,jsDestructuringArray,jsVariableDef
+syntax keyword jsStorageClass   const var let return skipwhite skipempty nextgroup=jsDestructuringBlock,jsDestructuringArray,jsVariableDef
 syntax match   jsVariableDef    contained /\<\K\k*/ skipwhite skipempty nextgroup=jsFlowDefinition
 syntax keyword jsOperatorKeyword delete instanceof typeof void new in of skipwhite skipempty nextgroup=@jsExpression
 syntax match   jsOperator       "[-!|&+<>=%/*~^]" skipwhite skipempty nextgroup=@jsExpression
@@ -83,14 +83,6 @@ syntax match   jsFunctionKey       contained /\<\K\k*\ze\s*:\s*function\>/
 syntax match   jsObjectMethodType  contained /\<[gs]et\ze\s\+\K\k*/ skipwhite skipempty nextgroup=jsObjectFuncName
 syntax region  jsObjectStringKey   contained start=+\z(["']\)+  skip=+\\\%(\z1\|$\)+  end=+\z1\|$+  contains=jsSpecial,@Spell extend skipwhite skipempty nextgroup=jsFuncArgs,jsObjectValue
 
-exe 'syntax keyword jsNull      null             '.(exists('g:javascript_conceal_null')      ? 'conceal cchar='.g:javascript_conceal_null       : '')
-exe 'syntax keyword jsReturn    return contained '.(exists('g:javascript_conceal_return')    ? 'conceal cchar='.g:javascript_conceal_return     : '').' skipwhite nextgroup=@jsExpression'
-exe 'syntax keyword jsUndefined undefined        '.(exists('g:javascript_conceal_undefined') ? 'conceal cchar='.g:javascript_conceal_undefined  : '')
-exe 'syntax keyword jsNan       NaN              '.(exists('g:javascript_conceal_NaN')       ? 'conceal cchar='.g:javascript_conceal_NaN        : '')
-exe 'syntax keyword jsPrototype prototype        '.(exists('g:javascript_conceal_prototype') ? 'conceal cchar='.g:javascript_conceal_prototype  : '')
-exe 'syntax keyword jsThis      this             '.(exists('g:javascript_conceal_this')      ? 'conceal cchar='.g:javascript_conceal_this       : '')
-exe 'syntax keyword jsSuper     super  contained '.(exists('g:javascript_conceal_super')     ? 'conceal cchar='.g:javascript_conceal_super      : '')
-
 " Statement Keywords
 syntax match   jsBlockLabel              /\<\K\k*\s*::\@!/    contains=jsNoise skipwhite skipempty nextgroup=jsBlock
 syntax match   jsBlockLabelKey contained /\<\K\k*\ze\s*\_[;]/
@@ -107,8 +99,8 @@ syntax keyword jsFinally      contained finally         skipwhite skipempty next
 syntax keyword jsCatch        contained catch           skipwhite skipempty nextgroup=jsParenCatch
 syntax keyword jsException              throw
 syntax keyword jsAsyncKeyword           async await
-syntax match   jsSwitchColon   contained /::\@!/        skipwhite skipempty nextgroup=jsSwitchBlock
 syntax keyword tsClassAccessKeyword     private protected public
+syntax match   jsSwitchColon   contained /::\@!/        skipwhite skipempty nextgroup=jsSwitchBlock
 
 " Keywords
 syntax keyword jsGlobalObjects      Array Boolean Date Function Iterator Number Object Symbol Map WeakMap Set WeakSet RegExp String Proxy Promise Buffer ParallelArray ArrayBuffer DataView Float32Array Float64Array Int16Array Int32Array Int8Array Uint16Array Uint32Array Uint8Array Uint8ClampedArray JSON Math console document window Intl Collator DateTimeFormat NumberFormat fetch
@@ -141,7 +133,7 @@ syntax region  jsParenIfElse        contained matchgroup=jsParensIfElse        s
 syntax region  jsParenRepeat        contained matchgroup=jsParensRepeat        start=/(/  end=/)/  contains=@jsAll skipwhite skipempty nextgroup=jsCommentRepeat,jsRepeatBlock extend fold
 syntax region  jsParenSwitch        contained matchgroup=jsParensSwitch        start=/(/  end=/)/  contains=@jsAll skipwhite skipempty nextgroup=jsSwitchBlock extend fold
 syntax region  jsParenCatch         contained matchgroup=jsParensCatch         start=/(/  end=/)/  skipwhite skipempty nextgroup=jsTryCatchBlock extend fold
-syntax region  jsFuncArgs           contained matchgroup=jsFuncParens          start=/(/  end=/)/  contains=jsFuncArgCommas,jsComment,jsFuncArgExpression,jsDestructuringBlock,jsDestructuringArray,jsRestExpression,jsFlowArgumentDef,tsType skipwhite skipempty nextgroup=jsCommentFunction,jsFuncBlock,jsFlowReturn extend fold
+syntax region  jsFuncArgs           contained matchgroup=jsFuncParens          start=/(/  end=/)/  contains=jsFuncArgCommas,jsComment,jsFuncArgExpression,jsDestructuringBlock,jsDestructuringArray,jsRestExpression,jsFlowArgumentDef skipwhite skipempty nextgroup=jsCommentFunction,jsFuncBlock,jsFlowReturn extend fold
 syntax region  jsClassBlock         contained matchgroup=jsClassBraces         start=/{/  end=/}/  contains=jsClassFuncName,jsClassMethodType,jsArrowFunction,jsArrowFuncArgs,jsComment,jsGenerator,jsDecorator,jsClassProperty,tsClassMethod,jsClassPropertyComputed,jsClassStringKey,jsAsyncKeyword,tsClassAccessKeyword,jsNoise extend fold
 syntax region  jsFuncBlock          contained matchgroup=jsFuncBraces          start=/{/  end=/}/  contains=@jsAll,jsBlock extend fold
 syntax region  jsIfElseBlock        contained matchgroup=jsIfElseBraces        start=/{/  end=/}/  contains=@jsAll,jsBlock extend fold
@@ -183,8 +175,6 @@ syntax match   jsClassNoise             contained /\./
 syntax match   jsClassFuncName          contained /\<\K\k*\ze\s*[(<]/ skipwhite skipempty nextgroup=jsFuncArgs,jsFlowClassFunctionGroup
 syntax match   jsClassMethodType        contained /\<\%([gs]et\|static\)\ze\s\+\K\k*/ skipwhite skipempty nextgroup=jsAsyncKeyword,tsClassAccessKeyword,jsClassFuncName,jsClassProperty,tsClassMethod
 syntax region  jsClassDefinition                  start=/\<class\>/ end=/\(\<extends\>\s\+\)\@<!{\@=/ contains=jsClassKeyword,jsExtendsKeyword,jsClassNoise,@jsExpression,jsFlowClassGroup skipwhite skipempty nextgroup=jsCommentClass,jsClassBlock,jsFlowClassGroup
-syntax match   jsClassProperty          contained /\<\K\k*\ze\s*:\?\s*\k*\s*=\?/ skipwhite skipempty contains=tsType nextgroup=jsClassValue,jsFlowClassDef
-syntax match   tsClassMethod            contained /\<\K\k*\s*(.*)\s*:\?\s*\k*/ skipwhite skipempty contains=tsType,jsFuncArgs nextgroup=jsFuncBlock
 syntax region  jsClassValue             contained start=/=/ end=/\_[;}]\@=/ contains=@jsExpression
 syntax region  jsClassPropertyComputed  contained matchgroup=jsBrackets start=/\[/ end=/]/ contains=@jsExpression skipwhite skipempty nextgroup=jsFuncArgs,jsClassValue extend
 syntax region  jsClassStringKey         contained start=+\z(["']\)+  skip=+\\\%(\z1\|$\)+  end=+\z1\|$+  contains=jsSpecial,@Spell extend skipwhite skipempty nextgroup=jsFuncArgs
@@ -220,37 +210,76 @@ syntax region  jsCommentRepeat      contained start=+/\*+ end=+\*/+ contains=jsC
 syntax match   jsDecorator                    /^\s*@/ nextgroup=jsDecoratorFunction
 syntax match   jsDecoratorFunction  contained /\h[a-zA-Z0-9_.]*/ nextgroup=jsParenDecorator
 
-" TypeScript
-" syntax keyword tsType             contained boolean number string Array enum any void null undefined never object
-
-
-
-
-
-" ==============================================================================
-
-syntax match  tsInterfaceKey  contained /\k*\ze\s*:/ skipwhite skipempty nextgroup=tsType
-syntax match  tsType contained /:\s*\k*\(<.*>\)\?/ extend contains=jsNoise
+syntax keyword jsThis    contained this
 
 syntax keyword tsInterfaceKeyword contained interface
 syntax region  tsInterfaceDefinition start=/interface/ end=/\(extends\s\+\)\@<!{\@=/ contains=tsInterfaceKeyword skipwhite skipempty nextgroup=tsInterface
-" syntax match   tsInterfaceKey /\K\k*\s*:/ skipwhite skipempty nextgroup=tsInterfaceType contained
-" syntax region  tsType         start=/:/ end=/$/ skipwhite skipempty contained
-syntax region  tsInterface    start=/{/  end=/}/ contains=tsInterfaceKey,tsType extend fold contained
+syntax region  tsInterface    start=/{/  end=/}/ contains=jsFlowClassProperty,jsFlowDefinition extend fold contained
+
+syntax keyword tsTypeKeyword contained type
+syntax region  tsTypeDefinition start=/\<type\>/ end=/{\@=/ contains=tsTypeKeyword,jsFlowTypeOperator skipwhite skipempty nextgroup=tsType
+syntax region  tsType    start=/{/  end=/}/ contains=jsFlowClassProperty,jsFlowDefinition extend fold contained
 
 " ==============================================================================
 
-if exists("javascript_plugin_jsdoc")
-  runtime extras/jsdoc.vim
-  " NGDoc requires JSDoc
-  if exists("javascript_plugin_ngdoc")
-    runtime extras/ngdoc.vim
-  endif
-endif
+syntax region  jsFlowDefinition     contained                        start=/:/    end=/\%(\s*[,=;)\n]\)\@=/ contains=@jsFlowCluster containedin=jsParen
+syntax region  jsFlowArgumentDef    contained                        start=/:/    end=/\%(\s*[,)]\|=>\@!\)\@=/ contains=@jsFlowCluster
+syntax region  jsFlowArray          contained matchgroup=jsFlowNoise start=/\[/   end=/\]/        contains=@jsFlowCluster,jsComment fold
+syntax region  jsFlowObject         contained matchgroup=jsFlowNoise start=/{/    end=/}/         contains=@jsFlowCluster,jsComment fold
+syntax region  jsFlowExactObject    contained matchgroup=jsFlowNoise start=/{|/   end=/|}/       contains=@jsFlowCluster,jsComment fold
+syntax region  jsFlowParens         contained matchgroup=jsFlowNoise start=/(/  end=/)/ contains=@jsFlowCluster keepend fold
+syntax match   jsFlowNoise          contained /[:;,<>]/
+syntax keyword jsFlowType           contained boolean number string null void any mixed JSON array Function object array bool class
+syntax keyword jsFlowTypeof         contained typeof skipempty skipempty nextgroup=jsFlowTypeCustom,jsFlowType
+syntax match   jsFlowTypeCustom     contained /[0-9a-zA-Z_.]*/ skipwhite skipempty nextgroup=jsFlowGroup
+syntax region  jsFlowGroup          contained matchgroup=jsFlowNoise start=/</ end=/>/ contains=@jsFlowCluster
+syntax region  jsFlowArrowArguments contained matchgroup=jsFlowNoise start=/(/  end=/)\%(\s*=>\)\@=/ oneline skipwhite skipempty nextgroup=jsFlowArrow contains=@jsFlowCluster
+syntax match   jsFlowArrow          contained /=>/ skipwhite skipempty nextgroup=jsFlowType,jsFlowTypeCustom,jsFlowParens
+syntax match   jsFlowObjectKey      contained /[0-9a-zA-Z_$?]*\(\s*:\)\@=/ contains=jsFunctionKey,jsFlowMaybe skipwhite skipempty nextgroup=jsObjectValue containedin=jsObject
+syntax match   jsFlowOrOperator     contained /|/ skipwhite skipempty nextgroup=@jsFlowCluster
+syntax match   jsFlowAndOperator    contained /&/ skipwhite skipempty nextgroup=@jsFlowCluster
+syntax keyword jsFlowImportType     contained type typeof skipwhite skipempty nextgroup=jsModuleAsterisk,jsModuleKeyword,jsModuleGroup
+syntax match   jsFlowWildcard       contained /*/
 
-if exists("javascript_plugin_flow")
-  runtime extras/flow.vim
-endif
+syntax match   jsFlowReturn         contained /:\s*/ contains=jsFlowNoise skipwhite skipempty nextgroup=@jsFlowReturnCluster,jsFlowArrow,jsFlowReturnParens
+syntax region  jsFlowReturnObject   contained matchgroup=jsFlowNoise start=/{/    end=/}/  contains=@jsFlowCluster skipwhite skipempty nextgroup=jsFuncBlock,jsFlowReturnOrOp fold
+syntax region  jsFlowReturnArray    contained matchgroup=jsFlowNoise start=/\[/   end=/\]/ contains=@jsFlowCluster skipwhite skipempty nextgroup=jsFuncBlock,jsFlowReturnOrOp fold
+syntax region  jsFlowReturnParens   contained matchgroup=jsFlowNoise start=/(/    end=/)/  contains=@jsFlowCluster skipwhite skipempty nextgroup=jsFuncBlock,jsFlowReturnOrOp,jsFlowReturnArrow fold
+syntax match   jsFlowReturnArrow    contained /=>/ skipwhite skipempty nextgroup=@jsFlowReturnCluster
+syntax match   jsFlowReturnKeyword  contained /\k\+/ contains=jsFlowType,jsFlowTypeCustom skipwhite skipempty nextgroup=jsFlowReturnGroup,jsFuncBlock,jsFlowReturnOrOp
+syntax match   jsFlowReturnMaybe    contained /?/ skipwhite skipempty nextgroup=jsFlowReturnKeyword,jsFlowReturnObject
+syntax region  jsFlowReturnGroup    contained matchgroup=jsFlowNoise start=/</ end=/>/ contains=@jsFlowCluster skipwhite skipempty nextgroup=jsFuncBlock,jsFlowReturnOrOp
+syntax match   jsFlowReturnOrOp     contained /\s*|\s*/ skipwhite skipempty nextgroup=@jsFlowReturnCluster
+syntax match   jsFlowWildcardReturn contained /*/ skipwhite skipempty nextgroup=jsFuncBlock
+
+syntax region  jsFlowFunctionGroup      contained matchgroup=jsFlowNoise start=/</ end=/>/ contains=@jsFlowCluster skipwhite skipempty nextgroup=jsFuncArgs
+syntax region  jsFlowClassGroup         contained matchgroup=jsFlowNoise start=/</ end=/>/ contains=@jsFlowCluster skipwhite skipempty nextgroup=jsClassBlock
+syntax region  jsFlowClassFunctionGroup contained matchgroup=jsFlowNoise start=/</ end=/>/ contains=@jsFlowCluster skipwhite skipempty nextgroup=jsFuncArgs
+
+" syntax region  jsFlowTypeStatement                                   start=/\(opaque\s\+\)\?type\%(\s\+\k\)\@=/    end=/=\@=/ contains=jsFlowTypeOperator oneline skipwhite skipempty nextgroup=jsFlowTypeValue keepend
+syntax region  jsFlowTypeValue      contained     matchgroup=jsFlowNoise start=/=/       end=/[\n;]/ contains=@jsFlowCluster,jsFlowGroup,jsFlowMaybe
+syntax match   jsFlowTypeOperator   contained /=/ containedin=jsFlowTypeValue
+syntax match   jsFlowTypeOperator   contained /=/
+syntax keyword jsFlowTypeKeyword    contained type
+
+syntax keyword jsFlowDeclare                  declare skipwhite skipempty nextgroup=jsFlowTypeStatement,jsClassDefinition,jsStorageClass,jsFlowModule,jsFlowInterface
+syntax match   jsFlowClassProperty  contained /\<[0-9a-zA-Z_$]*\>?\?\s*:\@=/ skipwhite skipempty nextgroup=jsFlowClassDef containedin=jsClassBlock contains=jsFlowMaybe
+syntax region  jsFlowClassDef       contained start=/:/    end=/\%(\s*[,=;)\n]\)\@=/ contains=@jsFlowCluster skipwhite skipempty nextgroup=jsClassValue
+
+syntax region  jsFlowModule         contained start=/module/ end=/{\@=/ skipempty skipempty nextgroup=jsFlowDeclareBlock contains=jsString
+" syntax region  jsFlowInterface      contained start=/interface/ end=/{\@=/ skipempty skipempty nextgroup=jsFlowInterfaceBlock contains=@jsFlowCluster
+syntax region  jsFlowDeclareBlock   contained matchgroup=jsFlowNoise start=/{/ end=/}/ contains=jsFlowDeclare,jsFlowNoise fold
+
+" NOTE: It appears the nextgroup was causing a ton of breakages... testing it
+" witout a nextgroup, but keeping this arround for reference incase something breaks
+" syntax match   jsFlowMaybe          contained /?/ nextgroup=jsFlowType,jsFlowTypeCustom,jsFlowParens,jsFlowArrowArguments,jsFlowObject,jsFlowReturnObject extend keepend
+syntax match   jsFlowMaybe          contained /?/
+syntax region  jsFlowInterfaceBlock contained matchgroup=jsFlowNoise start=/{/ end=/}/ contains=jsObjectKey,jsObjectKeyString,jsObjectKeyComputed,jsObjectSeparator,jsObjectFuncName,jsObjectMethodType,jsGenerator,jsComment,jsObjectStringKey,jsSpreadExpression,jsFlowNoise keepend fold
+
+syntax region  jsFlowParenAnnotation contained start=/:/ end=/[,=)]\@=/ containedin=jsParen contains=@jsFlowCluster
+
+syntax cluster jsFlowReturnCluster            contains=jsFlowNoise,jsFlowReturnObject,jsFlowReturnArray,jsFlowReturnKeyword,jsFlowReturnGroup,jsFlowReturnMaybe,jsFlowReturnOrOp,jsFlowWildcardReturn,jsFlowReturnArrow
+syntax cluster jsFlowCluster                  contains=jsFlowArray,jsFlowObject,jsFlowExactObject,jsFlowNoise,jsFlowTypeof,jsFlowType,jsFlowGroup,jsFlowArrowArguments,jsFlowMaybe,jsFlowParens,jsFlowOrOperator,jsFlowWildcard,jsFlowAndOperator
 
 syntax cluster jsExpression  contains=jsBracket,jsParen,jsObject,jsTernaryIf,jsTaggedTemplate,jsTemplateString,jsString,jsRegexpString,jsNumber,jsFloat,jsOperator,jsOperatorKeyword,jsBooleanTrue,jsBooleanFalse,jsNull,jsFunction,jsArrowFunction,jsGlobalObjects,jsExceptions,jsDomErrNo,jsDomNodeConsts,jsHtmlEvents,jsFuncCall,jsUndefined,jsNan,jsPrototype,jsBuiltins,jsNoise,jsClassDefinition,jsArrowFunction,jsArrowFuncArgs,jsParensError,jsComment,jsArguments,jsThis,jsSuper,jsDo,jsForAwait,jsAsyncKeyword,jsStatement,tsType,tsInterfaceDef,tsInterfaceKeyword
 syntax cluster jsAll         contains=@jsExpression,jsStorageClass,jsConditional,jsRepeat,jsReturn,jsException,jsTry,jsNoise,jsBlockLabel
@@ -394,12 +423,67 @@ if version >= 508 || !exists("did_typescript_syn_inits")
 
   HiLink jsCssStyles            Label
 
-  HiLink tsType                 Type
+
   HiLink tsInterfaceKeyword     Keyword
+  HiLink tsTypeKeyword          Keyword
+  HiLink tsType                 Noise
+
   HiLink tsInterfaceKey         jsObjectKey
+  HiLink tsTypeKey              jsObjectKey
+
   HiLink tsInterfaceDefinition  Function
+  HiLink tsTypeDefinition       Function
+
   HiLink tsClassAccessKeyword   Keyword
   HiLink tsClassMethod          jsObjectKey
+
+
+
+
+
+
+
+
+  HiLink jsFlowDefinition         PreProc
+  HiLink jsFlowClassDef           jsFlowDefinition
+  HiLink jsFlowArgumentDef        jsFlowDefinition
+  HiLink jsFlowType               Type
+  HiLink jsFlowTypeCustom         PreProc
+  HiLink jsFlowTypeof             PreProc
+  HiLink jsFlowArray              PreProc
+  HiLink jsFlowObject             PreProc
+  HiLink jsFlowExactObject        PreProc
+  HiLink jsFlowParens             PreProc
+  HiLink jsFlowGroup              PreProc
+  HiLink jsFlowReturn             PreProc
+  HiLink jsFlowParenAnnotation    PreProc
+  HiLink jsFlowReturnObject       jsFlowReturn
+  HiLink jsFlowReturnArray        jsFlowArray
+  HiLink jsFlowReturnParens       jsFlowParens
+  HiLink jsFlowReturnGroup        jsFlowGroup
+  HiLink jsFlowFunctionGroup      PreProc
+  HiLink jsFlowClassGroup         PreProc
+  HiLink jsFlowClassFunctionGroup PreProc
+  HiLink jsFlowArrowArguments     PreProc
+  HiLink jsFlowArrow              PreProc
+  HiLink jsFlowReturnArrow        PreProc
+  HiLink jsFlowTypeStatement      PreProc
+  HiLink jsFlowTypeKeyword        PreProc
+  HiLink jsFlowTypeOperator       Noise
+  HiLink jsFlowMaybe              Noise
+  HiLink jsFlowReturnMaybe        PreProc
+  HiLink jsFlowClassProperty      jsClassProperty
+  HiLink jsFlowDeclare            PreProc
+  HiLink jsFlowModule             PreProc
+  HiLink jsFlowNoise              Noise
+  HiLink jsFlowObjectKey          jsObjectKey
+  HiLink jsFlowOrOperator         jsOperator
+  HiLink jsFlowAndOperator        jsOperator
+  HiLink jsFlowReturnOrOp         jsFlowOrOperator
+  HiLink jsFlowWildcard           PreProc
+  HiLink jsFlowWildcardReturn     PreProc
+  HiLink jsFlowImportType         PreProc
+  HiLink jsFlowTypeValue          PreProc
   delcommand HiLink
 endif
 
