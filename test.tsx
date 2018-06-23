@@ -1,7 +1,7 @@
 import Toto from "lol"
 
 interface Lolol {
-  lol?    : Array<Toto>
+  lol?: Array<Toto>
   lol: string | null<Toto, lol>
 }
 
@@ -32,7 +32,7 @@ class Toto extends Lol {
       <Toto test="lol" o={true}>
         <Test
           test="lol"
-          toto={() => (
+          toto={(toto) => (
             this.coucou()
           )}
         >

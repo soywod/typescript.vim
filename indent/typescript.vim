@@ -1,9 +1,3 @@
-" Vim indent file
-" Language: Javascript
-" Maintainer: Chris Paul ( https://github.com/bounceme )
-" URL: https://github.com/pangloss/vim-javascript
-" Last Change: December 4, 2017
-
 " Only load this indent file when no other was loaded.
 if exists('b:did_indent')
   finish
@@ -473,3 +467,4 @@ endfunction
 
 let &cpo = s:cpo_save
 unlet s:cpo_save
+

@@ -1,11 +1,3 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim indent file
-"
-" Language: TSX (JavaScript)
-" Maintainer: Max Wang <mxawng@gmail.com>
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Save the current JavaScript indentexpr.
 let b:tsx_ts_indentexpr = &indentexpr
 

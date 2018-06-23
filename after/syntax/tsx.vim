@@ -1,14 +1,3 @@
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-" Vim syntax file
-"
-" Language: JSX (JavaScript)
-" Maintainer: Max Wang <mxawng@gmail.com>
-" Depends: pangloss/vim-javascript
-"
-" CREDITS: Inspired by Facebook.
-"
-"""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""""
-
 " Prologue; load in XML syntax.
 if exists('b:current_syntax')
   let s:current_syntax=b:current_syntax
