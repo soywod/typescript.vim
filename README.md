@@ -8,7 +8,7 @@ A sweet mix between [pangloss/vim-javascript](https://github.com/pangloss/vim-ja
 <img  width="861" src="https://user-images.githubusercontent.com/10437171/41809517-4758e4b2-76ef-11e8-9edb-f798c2e963ec.png"></img>
 </p>
 
-*Theme used: [One Light](https://github.com/rakr/vim-one)*
+*Theme: [One Light](https://github.com/rakr/vim-one), font: [Space Mono](https://fonts.google.com/specimen/Space+Mono)*
 
 ## Installation
 
