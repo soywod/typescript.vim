@@ -212,7 +212,6 @@ syntax keyword jsThis    contained this
 " TypeScript (from Flow syntax https://github.com/pangloss/vim-javascript/blob/master/extras/flow.vim)
 syntax keyword tsClassAccessKeyword contained private protected public
 syntax keyword tsInterfaceKeyword   contained interface
-syntax keyword tsTypeKeyword        contained type
 syntax keyword tsType               contained boolean number string null void any mixed JSON Array Function object bool
 
 syntax keyword tsTypeof     contained skipempty skipempty nextgroup=tsTypeCustom,tsType typeof
@@ -222,15 +221,18 @@ syntax keyword tsDeclare              skipwhite skipempty nextgroup=tsTypeStatem
 syntax region tsInterface           start=/{/ end=/}/ contains=tsClassProperty,tsDefinition extend fold contained
 syntax region tsInterfaceDefinition start=/interface/ end=/\(extends\s\+\)\@<!{\@=/ contains=tsInterfaceKeyword skipwhite skipempty nextgroup=tsInterface
 
-syntax region tsTypeRegion     start=/{/ end=/}/ contains=tsClassProperty,tsDefinition extend fold contained
-syntax region tsTypeDefinition start=/type/ end=/{\@=/ contains=tsTypeKeyword,tsTypeOperator skipwhite skipempty nextgroup=tsTypeRegion
+syntax region  tsTypeStatement  start=/\(opaque\s\+\)\?type\%(\s\+\k\)\@=/ end=/=\@=/ contains=tsTypeKeyword,tsTypeOperator oneline skipwhite skipempty nextgroup=tsTypeValue keepend
+syntax region  tsTypeValue      contained     matchgroup=tsNoise start=/=/ end=/[\n;]/ contains=@tsCluster,tsGroup,tsMaybe
+syntax match   tsTypeOperator   contained /=/ containedin=tsTypeValue
+syntax match   tsTypeOperator   contained /=/
+syntax keyword tsTypeKeyword    contained type
 
 syntax region  tsDefinition     contained                        start=/:/    end=/\%(\s*[,=;)\n]\)\@=/ contains=@tsCluster containedin=jsParen
 syntax region  tsArgumentDef    contained                        start=/:/    end=/\%(\s*[,)]\|=>\@!\)\@=/ contains=@tsCluster
-syntax region  tsArray          contained matchgroup=tsNoise start=/\[/   end=/\]/        contains=@tsCluster,jsComment fold
-syntax region  tsObject         contained matchgroup=tsNoise start=/{/    end=/}/         contains=@tsCluster,jsComment fold
-syntax region  tsExactObject    contained matchgroup=tsNoise start=/{|/   end=/|}/       contains=@tsCluster,jsComment fold
-syntax region  tsParens         contained matchgroup=tsNoise start=/(/  end=/)/ contains=@tsCluster keepend fold
+syntax region  tsArray          contained matchgroup=tsNoise start=/\[/ end=/\]/ contains=@tsCluster,jsComment fold
+syntax region  tsObject         contained matchgroup=tsNoise start=/{/  end=/}/  contains=@tsCluster,jsComment fold
+syntax region  tsExactObject    contained matchgroup=tsNoise start=/{|/ end=/|}/ contains=@tsCluster,jsComment fold
+syntax region  tsParens         contained matchgroup=tsNoise start=/(/  end=/)/  contains=@tsCluster keepend   fold
 syntax match   tsNoise          contained /[:;,<>]/
 syntax match   tsTypeCustom     contained /[0-9a-zA-Z_\.]*/ skipwhite skipempty nextgroup=tsGroup
 syntax region  tsGroup          contained matchgroup=tsNoise start=/</ end=/>/ contains=@tsCluster
@@ -256,6 +258,8 @@ syntax region  tsFunctionGroup      contained matchgroup=tsNoise start=/</ end=/
 syntax region  tsClassGroup         contained matchgroup=tsNoise start=/</ end=/>/ contains=@tsCluster skipwhite skipempty nextgroup=jsClassBlock
 syntax region  tsClassFunctionGroup contained matchgroup=tsNoise start=/</ end=/>/ contains=@tsCluster skipwhite skipempty nextgroup=jsFuncArgs
 
+syntax region  tsTypeValue      contained     matchgroup=jsFlowNoise start=/=/       end=/[\n;]/ contains=@tsCluster,tsGroup,tsMaybe
+syntax match   tsTypeOperator   contained /=/ containedin=jsFlowTypeValue
 syntax match   tsTypeOperator   contained /=/
 syntax match   tsClassProperty  contained /\<[0-9a-zA-Z_$]*\>?\?\s*:\@=/ skipwhite skipempty nextgroup=tsClassDef containedin=jsClassBlock contains=tsMaybe
 syntax region  tsClassDef       contained start=/:/    end=/\%(\s*[,=;)\n]\)\@=/ contains=@tsCluster skipwhite skipempty nextgroup=jsClassValue
@@ -419,7 +423,7 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink tsInterfaceKey         jsObjectKey
   HiLink tsTypeKey              jsObjectKey
   HiLink tsInterfaceDefinition  Keyword
-  HiLink tsTypeDefinition       Keyword
+  HiLink tsTypeStatement        Keyword
   HiLink tsClassAccessKeyword   Statement
   HiLink tsClassMethod          jsObjectKey
   HiLink tsDefinition           PreProc
