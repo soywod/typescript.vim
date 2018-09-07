@@ -1,13 +1,24 @@
 import React, {Component} from "react"
-import {HashRouter, Route, withRouter} from "react-router-dom"
 
-import Component1 from "./component/Component1"
+import ComponentX from "./ComponentX"
 
-interface IState {
+type TestType = string | Array<boolean>
+
+type TestType = {
+  loaded: boolean
+}
+
+interface TestInterface {
+  loaded: boolean
+}
+
+const testObj = {
   loaded: boolean
 }
 
 class AppComponent extends Component<{}, IState> {
+  private toto: string = "oeu"
+
   constructor(props: {}) {
     super(props)
     this.state = {loaded: false}
@@ -26,6 +37,10 @@ class AppComponent extends Component<{}, IState> {
         </ScrollToTop>
       </HashRouter>
     )
+  }
+
+  public toto: boolean = () => {
+    return "string"
   }
 
   public componentDidMount() {

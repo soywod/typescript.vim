@@ -433,7 +433,7 @@ if version >= 508 || !exists("did_typescript_syn_inits")
   HiLink tsTypeCustom           Type
   HiLink tsTypeof               PreProc
   HiLink tsArray                PreProc
-  HiLink tsObject               PreProc
+  HiLink tsObject               jsObjectKey
   HiLink tsExactObject          PreProc
   HiLink tsParens               PreProc
   HiLink tsGroup                PreProc
